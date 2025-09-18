@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinder Plants</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: #01190f;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto;
+            background-color: #01190f;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #033d2d;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cinder Soil Plants</h1>
+    <div class="container my-5">
+        <div class="row" id="plant-cards">
+            <!-- Plant Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+       const peatPlants = [
+    {
+        "name": "Succulents (சக்கிழ்கள்)",
+        "image": "/static/Succulents.png",
+        "brief": "Soil: Cinder, well-draining<br>Watering: Monthly<br>Nutrients: Low nutrient needs<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, well-draining (சிந்தர், நல்ல வடிகட்டி)<br>
+            <strong>Watering:</strong> Monthly (மாதந்தோறும் பாசனம்)<br>
+            <strong>Nutrients:</strong> Low nutrient needs (குறைவான ஊட்டச்சத்து தேவைகள்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Stores water in leaves, low maintenance (இலைகளில் நீரை சேமிக்கும், குறைந்த பராமரிப்பு)<br>
+            <strong>Traditional Importance:</strong> Used in skincare and medicinal purposes (சிகிச்சை மற்றும் தோல் பராமரிப்பில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Apply organic neem-based pesticides to prevent aphids and mealybugs (அப்பிட்ஸ் மற்றும் மில்லிபக்ஸ் தடுக்கும் நீம் சார்ந்த உயிரியல் வேதிகள் பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Cactus (கேக்டஸ்)",
+        "image": "/static/cactus.png",
+        "brief": "Soil: Cinder, low moisture<br>Watering: Minimal<br>Nutrients: Low<br>Conditions: Full sun, arid",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, low moisture (சிந்தர், குறைந்த ஈரப்பதம்)<br>
+            <strong>Watering:</strong> Minimal (குறைவான பாசனம்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun, arid (முழு சூரிய ஒளி, வாட்டில்)<br>
+            <strong>Benefits:</strong> Drought-tolerant, stores water in its stem (உலர்வுக்கு பொறுத்துள்ள, அதன் குழாயில் நீரை சேமிக்கிறது)<br>
+            <strong>Traditional Importance:</strong> Used for its medicinal properties (மருத்துவ பண்புகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Use organic neem oil to control scale insects and aphids (சூழலுக்கு மன்றாடும் நீம் எண்ணெய், சுருள் தொட்டிகள் மற்றும் அப்பிட்ஸ் கட்டுப்படுத்த பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Aloe Vera (ஆலோ வெரா)",
+        "image": "/static/aloe_vera.png",
+        "brief": "Soil: Cinder, well-drained<br>Watering: Bi-weekly<br>Nutrients: Low requirements<br>Conditions: Bright, indirect sunlight",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, well-drained (சிந்தர், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Bi-weekly (வாரம் இரு முறையாக)<br>
+            <strong>Nutrients:</strong> Low requirements (குறைவான தேவைகள்)<br>
+            <strong>Conditions:</strong> Bright, indirect sunlight (கிளர்ச்சி, நேரடியாக இல்லாத சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Heals burns and skin irritations (எரிச்சலான சருமம் மற்றும் எரிவதை குணப்படுத்துகிறது)<br>
+            <strong>Traditional Importance:</strong> Used for its medicinal benefits (மருத்துவப் பயன்பாடுகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Apply neem oil to prevent fungal infections and pests (ஊட்டச்சத்து குறைபாடுகளைத் தடுக்கும் நெய்தல் எண்ணெய் பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Agave (ஆகவே)",
+        "image": "/static/agave.png",
+        "brief": "Soil: Cinder, very well-drained<br>Watering: Monthly<br>Nutrients: Low<br>Conditions: Full sun, dry",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, very well-drained (சிந்தர், மிகவும் நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Monthly (மாதந்தோறும் பாசனம்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun, dry (முழு சூரிய ஒளி, உலர்ந்த)<br>
+            <strong>Benefits:</strong> Used in beverages, ornamental (பானங்களில் மற்றும் அலங்கார நோக்கங்களுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used for extracting fibers (நெய்தல் கம்பிகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Use insecticidal soap to treat mealybugs and aphids (மில்லிபக்ஸ் மற்றும் அப்பிட்ஸ் கண்டுபிடிக்கும் உயிரியல் சாப் பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Echeveria (ஈசெவீரியா)",
+        "image": "/static/echeveria.png",
+        "brief": "Soil: Cinder, sandy mix<br>Watering: Bi-weekly<br>Nutrients: Low<br>Conditions: Bright light, well-drained",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, sandy mix (சிந்தர், மணல் கலவை)<br>
+            <strong>Watering:</strong> Bi-weekly (வாரம் இரு முறையாக)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Bright light, well-drained (கிளர்ச்சி ஒளி, நன்கு வடிகட்டி)<br>
+            <strong>Benefits:</strong> Decorative and low maintenance (அலங்காரமான மற்றும் குறைந்த பராமரிப்பு)<br>
+            <strong>Traditional Importance:</strong> Used in ornamental gardening (அலங்கார தோட்டக்கலைக்கு பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Use neem-based pesticides to prevent fungal infections (பூஞ்சை தொற்றுகளை தடுக்கும் நீம் சார்ந்த பூச்சி கொண்ட பராமரிப்பு பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Jade Plant (ஜேடு தாவரம்)",
+        "image": "/static/jade_plant.png",
+        "brief": "Soil: Cinder, well-drained<br>Watering: Monthly<br>Nutrients: Moderate<br>Conditions: Bright, indirect light",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, well-drained (சிந்தர், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Monthly (மாதந்தோறும் பாசனம்)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Bright, indirect light (கிளர்ச்சி, நேரடியாக இல்லாத சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Symbol of prosperity and good fortune (செல்வாக்கு மற்றும் நற்பலன்களின் சின்னம்)<br>
+            <strong>Traditional Importance:</strong> Used in Feng Shui (ஃபெங் ஷுயில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil or insecticidal soap can control aphids and scale insects (அப்பிட்ஸ் மற்றும் சுருள் தொட்டிகள் கட்டுப்படுத்த நீம் எண்ணெய் அல்லது பூச்சி கொண்ட சாப பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Yucca (யுக்கா)",
+        "image": "/static/yucca.png",
+        "brief": "Soil: Cinder, sandy soil<br>Watering: Monthly<br>Nutrients: Low<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, sandy soil (சிந்தர், மணல் மண்)<br>
+            <strong>Watering:</strong> Monthly (மாதந்தோறும் பாசனம்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Resilient to drought, attractive foliage (உலர்வு பொறுத்தமான, அழகான இலைகள்)<br>
+            <strong>Traditional Importance:</strong> Used for ornamental purposes (அலங்கார நோக்கங்களுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Apply neem oil or insecticidal soap to control common pests (பூச்சி கொண்ட சாப அல்லது நீம் எண்ணெய் பயன்படுத்தி பொதுவான பூச்சிகளை கட்டுப்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Lavender (லாவண்டர்)",
+        "image": "/static/lavender.png",
+        "brief": "Soil: Cinder, well-draining<br>Watering: Weekly<br>Nutrients: Low<br>Conditions: Full sun, dry climate",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, well-draining (சிந்தர், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun, dry climate (முழு சூரிய ஒளி, உலர்ந்த பருவநிலை)<br>
+            <strong>Benefits:</strong> Used for its calming aroma and medicinal properties (அதன் ஆழ்ந்த மணம் மற்றும் மருத்துவப் பண்புகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used in essential oils (முக்கிய எண்ணெய்களில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Use organic neem oil to prevent aphids and fungal diseases (அப்பிட்ஸ் மற்றும் பூஞ்சை நோய்களைத் தடுக்கும் உயிரியல் நீம் எண்ணெய் பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Thyme (தைம்)",
+        "image": "/static/thyme.png",
+        "brief": "Soil: Cinder, sandy soil<br>Watering: Weekly<br>Nutrients: Low<br>Conditions: Full sun, well-drained",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, sandy soil (சிந்தர், மணல் மண்)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun, well-drained (முழு சூரிய ஒளி, நன்கு வடிகட்டி)<br>
+            <strong>Benefits:</strong> Used in cooking and medicinal purposes (பரிமாற்ற உணவுக்கும் மற்றும் மருத்துவப் பயன்பாடுகளுக்காக)<br>
+            <strong>Traditional Importance:</strong> Ancient use in treating ailments (பண்டைய கால மருத்துவத்தில்பயன்படுத்தப்பட்டது)<br>
+            <strong>Pesticides:</strong> Use neem oil to control aphids and whiteflies (அப்பிட்ஸ் மற்றும் வெள்ளைச்சோலையைத் தடுக்கும் நீம் எண்ணெய் பயன்படுத்தவும்)
+        `
+    },
+    {
+        "name": "Rosemary (ரோஸ்மேரி)",
+        "image": "/static/rosemary.png",
+        "brief": "Soil: Cinder, well-drained<br>Watering: Every 2 weeks<br>Nutrients: Low<br>Conditions: Full sun, drought-tolerant",
+        "detailed": `
+            <strong>Soil:</strong> Cinder, well-drained (சிந்தர், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Every 2 weeks (ஒவ்வொரு 2 வாரங்களும்)<br>
+            <strong>Nutrients:</strong> Low (குறைவான)<br>
+            <strong>Conditions:</strong> Full sun, drought-tolerant (முழு சூரிய ஒளி, உலர்வுக்கு பொறுத்தமான)<br>
+            <strong>Benefits:</strong> Used for its fragrance and medicinal properties (அதன் மணம் மற்றும் மருத்துவ பண்புகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used in teas and oils (தேயில்கள் மற்றும் எண்ணெய்களில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Use neem oil or insecticidal soap to control fungal infections (பூஞ்சை தொற்றுகளைத் தடுக்கும் நீம் எண்ணெய் அல்லது பூச்சி கொண்ட சாப பயன்படுத்தவும்)
+        `
+    }
+];
+
+
+
+
+        function displayPlants() {
+            const container = document.getElementById('plant-cards');
+            peatPlants.forEach((plant, index) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 my-3';
+
+                card.innerHTML = `
+                    <div class="card p-3">
+                        <div class="card" onclick="alert('You selected ${plant.name}')">
+                        <img src="${plant.image}" class="card-img-top" alt="${plant.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="card-text" id="plant-text-${index}">${plant.brief}</p>
+                            <button class="btn btn-dark" onclick="showDetails(${index})" id="read-more-${index}">Read More</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(index) {
+            const plant = peatPlants[index];
+            const textElement = document.getElementById(`plant-text-${index}`);
+            textElement.innerHTML = plant.detailed;
+
+            const button = document.getElementById(`read-more-${index}`);
+            button.style.display = "none"; // Hide the "Read More" button after showing details
+        }
+
+        displayPlants();
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FCM Test</title>
+  <script src="(link unavailable)"></script>
+  <script src="(link unavailable)"></script>
+</head>
+<body>
+  <h1>FCM Test</h1>
+
+  <script>
+    // Your Firebase project configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDmPjonCWaeVbGjJOhJqL7khTT_qCe1OkU",
+            authDomain: "green-grow-45.firebaseapp.com",
+            projectId: "green-grow-45",
+            storageBucket: "green-grow-45.firebasestorage.app",
+            messagingSenderId: "941319547900",
+            appId: "1:941319547900:web:6a76f3249652f2bf1c2079",
+            measurementId: "G-ZLZ02F0608"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Get the Messaging instance
+    const messaging = firebase.messaging();
+
+    // Request permission for notifications
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+        // Get the token and subscribe to notifications
+        messaging.getToken().then(token => {
+          console.log('Token:', token);
+        });
+      } else {
+        console.log('Notification permission denied.');
+      }
+    });
+  </script>
+</body>
+</html>

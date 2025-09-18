@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Green Grow</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBuZBAmKagcHx7rGDE1PZj4cO1PEoMe76s",
+    authDomain: "green-grow-2394d.firebaseapp.com",
+    projectId: "green-grow-2394d",
+    storageBucket: "green-grow-2394d.firebasestorage.app",
+    messagingSenderId: "601105416978",
+    appId: "1:601105416978:web:d974cc4b8633878714a9cb",
+    measurementId: "G-CTBKPHH6BF"
+  };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const justSignedUp = localStorage.getItem('justSignedUp');
+                if (!justSignedUp) {
+                    window.location.href = "index.html"; 
+                } // Redirect to login page if not logged in
+            }
+        });
+
+        window.loginUser = function() {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+            const loginError = document.getElementById("login-error");
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    loginError.innerHTML = ""; 
+                    localStorage.removeItem('justSignedUp'); // Clear previous errors
+                    alert("Login successful! Redirecting to the main page...");
+                    window.location.href = "index.html";  // Replace with your main page URL
+                })
+                .catch((error) => {
+                    loginError.innerHTML = error.message;  // Display error message
+                });
+        };
+    </script>
+</head>
+<body class="login-body">
+    <section class="login-section">
+        <div class="container text-center">
+            <h2 class="text-white">Login to Green Grow</h2>
+            <form id="loginForm" class="mt-4">
+                <div class="form-group">
+                    <label for="login-email" class="text-white">Email</label>
+                    <input type="email" class="form-control" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password" class="text-white">Password</label>
+                    <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
+                </div>
+                <button type="button" onclick="loginUser()" class="btn btn-primary">Login</button>
+            </form>
+            <div id="login-error" class="text-danger mt-2"></div>
+            <p class="text-white mt-3">Don't have an account? <a href="signup.html" class="text-primary">Create one</a></p>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

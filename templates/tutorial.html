@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    background-color: #01190f;
+}
+
+/* Custom Navbar Styles */
+.navbar-custom {
+    background-color: white; /* Ensure navbar background is white */
+}
+
+.navbar-custom .nav-link {
+    color: black; /* Set text color to black */
+}
+
+.navbar-custom .nav-link:hover {
+    color: gray; /* Optional: Change color on hover */
+}
+    
+footer {
+    background-color:rgb(1, 38, 16);
+    color: white;
+    padding: 40px 0;
+    text-align: center; /* Center the copyright text */
+  }
+
+    /* Container for the tutorial */
+    .tutorial-container {
+      
+      margin: 0 auto;
+      padding: 20px;
+      
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header Styling */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: white;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: white;
+    }
+
+    /* Step Section Styling */
+    .step {
+      margin-bottom: 40px;
+    }
+
+    .step h2 {
+      font-size: 1.8rem;
+      color: gainsboro;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 1.1rem;
+      color: lightcyan;
+      margin-bottom: 15px;
+    }
+
+    .step img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Footer Styling */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    footer p {
+      font-size: 1rem;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">      
+    
+    </pre>
+        <img src="gl.png" width="55px">
+    
+        <a class="navbar-brand" href="#">Green Grow</a>
+       
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:5000">Plant Suggestions</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logoutUser()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+  <div class="tutorial-container">
+    <header>
+      <h1>Welcome to the Green Grow Tutorial</h1>
+      <p>Learn how to use the app step by step</p>
+    </header>
+
+    <section class="step">
+      <h2>Step 1: Check Weather Insights</h2>
+      <p>Once logged in,allow the app to access your location.<br/> After allowing to access the location, the below mentioned contents will be shown. </p>
+      <img src="Screenshot 2024-12-23 180136.png" alt="Download App">
+    </section>
+
+    <section class="step">
+      <h2>Step 2: Soil Type Prediction</h2>
+      <p>once logged in, you could able to see "Plant Suggestions" on the top right. Click "Plant Suggestions".</p>
+      <img src="plant.jpg" alt="Sign Up">
+      <p>Once you click "Plant Suggestions", you will see a Soil Prediction page which is given below.</p>
+      <img src="type.jpg">
+    </section>
+
+    <section class="step">
+      <h2>Step 3: Soil Type Prediction</h2>
+      <p>Click on the "Choose File" to choose the pic of your soil.<br/>Once the file is uploaded, the file name will be displayed on it's side.<br>Click on "Predict Soil Type".</p>
+      <img src="file.jpg" alt="Explore Features"><br/>
+      <img src="predic.jpg" alt="Explore Features">
+    </section>
+    <section class="step">
+        <h2>Step 4: Plant Suggestions</h2>
+        <p>Based on the soil you have provided, the plants are suggested. Click on "Read More" to get more information about plants.</p>
+        <img src="Screenshot 2024-12-23 180312.png" alt="Explore Features">
+      </section>
+
+    <footer>
+      <p> Green Grow 2024 All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>

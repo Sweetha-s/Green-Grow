@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Type Prediction Result</title>
+   
+    <!-- Include Bootstrap CSS for Navbar -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("/static/log.png"); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column; /* Stack navbar and container */
+            justify-content: flex-start; /* Align items from top */
+        }
+
+        .navbar-custom {
+            background-color: #388e3c; /* Custom green background for navbar */
+        }
+
+        .navbar-brand {
+            color: white !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #33691e !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px; /* Max width of the container */
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center text within the container */
+            margin-top: 20px; /* Add spacing from the navbar */
+        }
+
+        h1 {
+            color: #388e3c; /* Dark green for the header */
+        }
+
+        p {
+            color: #333; /* Dark gray for the text */
+            font-size: 18px;
+        }
+
+        .result p {
+            font-weight: bold;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #388e3c; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #33691e; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <img src="/static/gl.png" width="55px" alt="Logo">
+        <a class="navbar-brand" href="">Green Grow</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/templates/index.html#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/templates/login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/templates/index.html#contact">Contact</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="logoutUser()">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1>Soil Type Prediction Result</h1>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="soil_image" accept="image/*" required>
+            <button type="submit">Predict Soil Type</button>
+        </form>
+        <div class="result">
+            <p><strong>Predicted Soil Type:</strong> {{ predicted_soil_type }}</p>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS for Navbar toggle -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

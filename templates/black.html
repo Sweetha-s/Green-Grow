@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Plants</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: #01190f;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto;
+            background-color: #01190f;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #033d2d;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Black Soil Plants</h1>
+    <div class="container my-5">
+        <div class="row" id="plant-cards">
+            <!-- Plant Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+      const peatPlants = [
+    {
+        "name": "Cotton (சூது)",
+        "image": "/static/cotton.png",
+        "brief": "Soil: Black, high moisture<br>Watering: Twice a week<br>Nutrients: High nitrogen, potassium<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Black, high moisture (கருப்பு, அதிக ஈரப்பதம்)<br>
+            <strong>Watering:</strong> Twice a week (வாரம் இரண்டு முறைகள் பாசனம்)<br>
+            <strong>Nutrients:</strong> High nitrogen, potassium (உயர் நைட்ரஜன், பொட்டாசியம்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Used in textiles and oil (வெள்ளை சூது மற்றும் எண்ணெய் உற்பத்தியில் பயன்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Key cash crop in many countries (பல நாடுகளில் முக்கிய வருமான பயிர்)<br>
+       
+        <strong>pesticides:</strong> "Use organic pesticides to prevent bollworm (பொல்ல்வொரின் நோய்க்கு எதிரான உயிரியல் வேதிகள்)"
+     `},
+    {
+        "name": "Hibiscus (செம்பருத்தி)",
+        "image": "/static/hibiscus.png",
+        "brief": "Soil: Well-draining, slightly acidic<br>Watering: Regular, keep soil moist<br>Nutrients: Rich in potassium, phosphorus<br>Conditions: Full sun to partial shade",
+        "detailed": `
+            <strong>Soil:</strong> Well-draining, slightly acidic (நன்கு வழிந்துவிட்ட, சற்று அமிலமான மண்)<br>
+            <strong>Watering:</strong> Regular, keep soil moist (பொதுவாக பாசனம், மண் ஈரமாக வைத்திருத்தல்)<br>
+            <strong>Nutrients:</strong> Rich in potassium, phosphorus (பொட்டாசியம் மற்றும் பாஷ்பரஸ் நிறைந்தது)<br>
+            <strong>Conditions:</strong> Full sun to partial shade (முழு சூரிய ஒளி முதல் பகுதி நிழல்)<br>
+            <strong>Benefits:</strong> Known for its beautiful flowers, used in herbal teas (அழகான பூக்கள் கொண்டு புகழ்பெற்றது, மூலிகை தேனீர்களில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used in hair care and traditional medicine (முடி பராமரிப்பிலும், பாரம்பரிய மருத்துவத்திலும் பயன்படுத்தப்படுகிறது)<br>
+        
+        <strong>pesticides:</strong> "Apply neem oil to control aphids and mites (அப்பிட்ஸ் மற்றும் மைட்ஸ் காக்க நீம் எண்ணெய் பயன்படுத்தவும்)"
+    `},
+    {
+        "name": "Soybean (சோயா பீன்)",
+        "image": "/static/soyabean.png",
+        "brief": "Soil: Black, nutrient-rich<br>Watering: Twice a week<br>Nutrients: Nitrogen-fixing<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Black, nutrient-rich (கருப்பு, சத்துக்கள் நிறைந்த)<br>
+            <strong>Watering:</strong> Twice a week (வாரம் இரண்டு முறைகள் பாசனம்)<br>
+            <strong>Nutrients:</strong> Nitrogen-fixing (நைட்ரஜன் பின்வாங்குதல்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> High in protein, used in various food products (உயர் புரதம் கொண்டது, பல உணவுகளுக்குப் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Common in vegetarian diets (சைவ உணவுகளுக்குப் பொதுவானது)<br>
+      
+        <strong>pesticides:<strong> "Use pyrethrin-based pesticides for pest control (பஸ்டுகளைக் கட்டுப்படுத்த பைரிதிரின் சார்ந்த உயிரியல் வேதிகள்)"
+      `},
+    {
+        "name": "Sunflower (சூரியக்கதிர்)",
+        "image": "/static/sunflower.png",
+        "brief": "Soil: Black, well-draining<br>Watering: Weekly<br>Nutrients: Rich in phosphorus<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Black, well-draining (கருப்பு, நன்றாக வற்றும்)<br>
+            <strong>Watering:</strong> Weekly (வாரத்திற்கு ஒரு முறையாவது பாசனம்)<br>
+            <strong>Nutrients:</strong> Rich in phosphorus (பாஷ்பரஸின் அடிப்படையில் செறிவு)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Rich in oil, boosts energy (எண்ணெயின் நிறைந்தது, ஆற்றலை அதிகரிக்கின்றது)<br>
+            <strong>Traditional Importance:</strong> Used in cooking oils and snacks (எண்ணெய் மற்றும் நொறுக்கிய உணவுகளுக்குப் பயன்படுத்தப்படுகிறது)<br>
+       
+        <strong>pesticides:</strong> "Use insecticidal soap to treat aphids and caterpillars (அப்பிட்ஸ் மற்றும் பறவைகள் மீது பூச்சி மருந்து சாப்பிடவும்)"
+    ` },
+    {
+        "name": "Sugarcane (பச்சரிசி)",
+        "image": "/static/sugarcane.png",
+        "brief": "Soil: Black, moisture-rich<br>Watering: Regular<br>Nutrients: High potassium<br>Conditions: Warm and sunny",
+        "detailed": `
+            <strong>Soil:</strong> Black, moisture-rich (கருப்பு, ஈரமான)<br>
+            <strong>Watering:</strong> Regular (பொதுவாக பாசனம்)<br>
+            <strong>Nutrients:</strong> High potassium (உயர் பொட்டாசியம்)<br>
+            <strong>Conditions:</strong> Warm and sunny (வெப்பமான மற்றும் சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Used for sugar production and ethanol (சக்கரை உற்பத்தி மற்றும் எதனோல்)<br>
+            <strong>Traditional Importance:</strong> Significant in agricultural economies (விவசாய பொருளாதாரங்களில் முக்கிய பங்கு)<br>
+        
+        <strong>pesticides:</strong> "Apply systemic insecticides to control scale insects (செயல்படும் பூச்சிகளை கட்டுப்படுத்த சிஸ்டமிக் பூச்சி மருந்துகள் பயன்படுத்தவும்)"
+    `},
+    {
+        "name": "Jute (ஜூட்)",
+        "image": "/static/jute.png",
+        "brief": "Soil: Black, well-draining<br>Watering: Moderate<br>Nutrients: Moderate nitrogen<br>Conditions: High humidity, warm weather",
+        "detailed": `
+            <strong>Soil:</strong> Black, well-draining (கருப்பு, நன்றாக வற்றும்)<br>
+            <strong>Watering:</strong> Moderate (மிதமான பாசனம்)<br>
+            <strong>Nutrients:</strong> Moderate nitrogen (மிதமான நைட்ரஜன்)<br>
+            <strong>Conditions:</strong> High humidity, warm weather (உயர்ந்த ஈரப்பதம், வெப்பமான வானிலை)<br>
+            <strong>Benefits:</strong> Used in textile production (பொருள் உற்பத்தி)<br>
+            <strong>Traditional Importance:</strong> Widely used in ropes and sacks (கயிற்றுகள் மற்றும் பையில் பயன்படுத்தப்படுகிறது)<br>
+        
+        <strong>pesticides:</strong> "Use neem oil for controlling caterpillars and aphids (கட்லர் மற்றும் அப்பிட்ஸ் காக்க நீம் எண்ணெய் பயன்படுத்தவும்)"
+    `},
+    {
+        "name": "Tobacco (புகைப்பொடி)",
+        "image": "/static/tobacco.png",
+        "brief": "Soil: Black, rich in nutrients<br>Watering: Light<br>Nutrients: High nitrogen<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Black, rich in nutrients (கருப்பு, சத்துக்கள் நிறைந்த)<br>
+            <strong>Watering:</strong> Light (எளிதான பாசனம்)<br>
+            <strong>Nutrients:</strong> High nitrogen (உயர் நைட்ரஜன்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Used in tobacco products (புகை பொருட்களில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Historically used in agricultural practices (பண்டைய காலங்களில் விவசாய நடைமுறைகளில் பயன்படுத்தப்பட்டது)<br>
+       
+        <strong>pesticides:</strong> "Use a combination of organic pesticides and fungicides (உயிரியல் வேதிகள் மற்றும் பூச்சி மருந்துகளுடன் சேர்த்து பயன்படுத்தவும்)"
+    ` },
+    {
+        "name": "Peanuts (வேர்கடலை)",
+        "image": "/static/peanuts.png",
+        "brief": "Soil: Black, sandy<br>Watering: Weekly<br>Nutrients: Phosphorus<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Black, sandy (கருப்பு, மணல் மண்)<br>
+            <strong>Watering:</strong> Weekly (வாரத்திற்கு ஒரு முறையாவது பாசனம்)<br>
+            <strong>Nutrients:</strong> Phosphorus (பாஷ்பரஸ்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Rich in protein, good for heart (புரதம் நிறைந்தது, இதயத்திற்கு நல்லது)<br>
+            <strong>Traditional Importance:</strong> Used in snacks, butter, and oils (நொறுக்கிய உணவு, பட்டர் மற்றும் எண்ணெய்களில் பயன்படுத்தப்படுகிறது)<br>
+       
+        <strong>pesticides:</strong> "Apply organic neem-based pesticides to prevent aphids and leaf spot (அப்பிட்ஸ் மற்றும் இலையின் கறை தடுக்கும் நீம் சார்ந்த உயிரியல் வேதிகள் பயன்படுத்தவும்)"
+     `}
+];
+
+
+
+        function displayPlants() {
+            const container = document.getElementById('plant-cards');
+            peatPlants.forEach((plant, index) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 my-3';
+
+                card.innerHTML = `
+                    <div class="card p-3">
+                        <div class="card" onclick="alert('You selected ${plant.name}')">
+                        <img src="${plant.image}" class="card-img-top" alt="${plant.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="card-text" id="plant-text-${index}">${plant.brief}</p>
+                            <button class="btn btn-dark" onclick="showDetails(${index})" id="read-more-${index}">Read More</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(index) {
+            const plant = peatPlants[index];
+            const textElement = document.getElementById(`plant-text-${index}`);
+            textElement.innerHTML = plant.detailed;
+
+            const button = document.getElementById(`read-more-${index}`);
+            button.style.display = "none"; // Hide the "Read More" button after showing details
+        }
+
+        displayPlants();
+    </script>
+</body>
+</html>

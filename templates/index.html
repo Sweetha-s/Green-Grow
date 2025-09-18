@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Grow</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging-sw.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBuZBAmKagcHx7rGDE1PZj4cO1PEoMe76s",
+    authDomain: "green-grow-2394d.firebaseapp.com",
+    projectId: "green-grow-2394d",
+    storageBucket: "green-grow-2394d.firebasestorage.app",
+    messagingSenderId: "601105416978",
+    appId: "1:601105416978:web:d974cc4b8633878714a9cb",
+    measurementId: "G-CTBKPHH6BF"
+  };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "login.html"; // Redirect to login page if not logged in
+            }
+        });
+
+        // Function to log out the user
+        window.logoutUser = function() {
+            auth.signOut().then(() => {
+                window.location.href = "login.html"; // Redirect to login page after logging out
+            }).catch((error) => {
+                console.error("Logout error:", error);
+            });
+        };
+    </script>
+    
+
+</head>
+<body>
+   
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">      
+    
+</pre>
+    <img src="gl.png" width="55px">
+
+    <a class="navbar-brand" href="#">Green Grow</a>
+   
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="tutorial.html">Tutorial</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:5000">Plant Suggestions</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="logoutUser()">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- Other sections like Home, About Us, etc. -->
+
+<div class="weather-container">
+    <div class="container-weather">
+        <h1 style="color: lightgreen;">Weather and Soil Moisture Details</h1>
+        <div id="details-box" class="details-boxes"></div>
+        <div id="details-box-error" class="details-box-error">
+            <p>Unable to retrieve your location. Please allow location access in your browser settings.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function getWeatherData(latitude, longitude) {
+        const apiKey = '6d5a830749d84519838122934242312'; // Replace with your actual API key
+        const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('details-box-error').innerHTML = `<p>Error: ${data.error.message}</p>`;
+                document.getElementById('details-box-error').style.display = 'block'; // Show error message
+            } else {
+                const weather = data.current;
+                const location = data.location;
+
+                const weatherDetails = `
+                    <div class="weather-item">
+                        <h3>Location</h3>
+                        <p>${location.name}, ${location.region}, ${location.country}</p>
+                    </div>
+                    <div class="weather-item">
+                        <h3>Temperature</h3>
+                        <p>${weather.temp_c}°C</p>
+                    </div>
+                    <div class="weather-item">
+                        <h3>Condition</h3>
+                        <p>${weather.condition.text}</p>
+                    </div>
+                    <div class="weather-item">
+                        <h3>Humidity</h3>
+                        <p>${weather.humidity}%</p>
+                    </div>
+                    <div class="weather-item">
+                        <h3>Wind</h3>
+                        <p>${weather.wind_kph} km/h</p>
+                    </div>
+                    <div class="weather-item">
+                        <h3>Precipitation</h3>
+                        <p>${weather.precip_mm} mm</p>
+                    </div>
+                    
+                `;
+
+                document.getElementById('details-box').innerHTML = weatherDetails;
+                document.getElementById('details-box-error').style.display = 'none'; // Hide error box if data is loaded
+
+                calculateSoilMoisture(weather.precip_mm, weather.temp_c, weather.humidity);
+            }
+        } catch (error) {
+            document.getElementById('details-box-error').innerHTML = '<p>Unable to fetch weather data. Please try again later.</p>';
+            document.getElementById('details-box-error').style.display = 'block'; // Show error message
+            console.error("Error fetching weather data: ", error);
+        }
+    }
+    fetch('https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}') 
+    .then(response => response.json())
+    .then(data => {
+        // Print the full JSON response to the console
+        console.log(data);
+
+        // Access the humidity properly based on the API response structure
+        const humidity = data.current.humidity; // Assuming 'current' is the correct path for humidity
+        console.log(`Humidity: ${humidity}%`);
+
+        const threshold = 100; // Put suitable threshold
+
+        if (humidity < threshold) {
+            notifyUser(`Humidity is low at ${humidity}%. Water the plants!`);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+function notifyUser(message) {
+    if ('Notification' in window) {
+
+        if (Notification.permission === 'granted') {
+            showNotification(message);
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    showNotification(message);
+                }
+            });
+        } else {
+            console.log('Notifications are blocked. Please enable them in your browser settings.');
+        }
+    } else {
+        console.log('Your browser does not support notifications.');
+    }
+}
+
+// To display a notification
+function showNotification(message) {
+    new Notification('Low Humidity Alert', {
+        body: message,
+        icon: 'https://via.placeholder.com/100' // pic in notification
+    });
+}
+
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    getWeatherData(latitude, longitude);
+                },
+                (error) => {
+                    console.error("Geolocation Error: ", error);
+                    document.getElementById('details-box-error').innerHTML = "<p>Unable to retrieve your location. Please allow location access in your browser settings.</p>";
+                    document.getElementById('details-box-error').style.display = 'block'; // Show error message
+                }
+            );
+        } else {
+            document.getElementById('details-box-error').innerHTML = "<p>Geolocation is not supported by your browser.</p>";
+            document.getElementById('details-box-error').style.display = 'block'; // Show error message
+        }
+    }
+
+    function estimateEvapotranspiration(temp, humidity) {
+        return (temp * humidity) / 100;
+    }
+
+    function calculateSoilMoisture(precipitation, temperature, humidity) {
+        const initialSoilMoisture = 100;
+        const evapotranspiration = estimateEvapotranspiration(temperature, humidity);
+        const soilMoistureChange = precipitation - evapotranspiration;
+        const soilMoisture = initialSoilMoisture + soilMoistureChange;
+
+        const soilMoistureDetails = `
+            <div class="soil-moisture-item">
+                <h3>Evapotranspiration (ET)</h3>
+                <p>${evapotranspiration.toFixed(2)} mm</p>
+            </div>
+            <div class="soil-moisture-item">
+                <h3>Calculated Soil Moisture</h3>
+                <p>${soilMoisture.toFixed(2)} mm</p>
+            </div>
+           
+        `;
+
+        document.getElementById('details-box').insertAdjacentHTML('beforeend', soilMoistureDetails);
+    }
+    
+
+
+    window.onload = getUserLocation;
+</script>
+
+<style>
+body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    background-color: #01190f;
+}
+</style>
+
+
+
+
+
+
+<!-- Home Section -->
+
+<div class="row" style="background-color:#01190f ;">
+            
+    <!-- Plant Cards (20 Cards) -->
+    <div class="col-md-4 col-sm-6 my-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Humidity</h5>
+                <p class="card-text " >Low-Level:Below 40%<br/>
+                    Moderate-Level:40-70%<br/>
+                    High-Level:Above 70%    <br/>      </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6 my-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Precipitation</h5>
+                <p class="card-text " >Low-Level:Below 2 mm<br/>
+                    Moderate-Level:2-10 mm<br/>
+                    High-Level:Above 10 mm   <br/>      </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6 my-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Moisture</h5>
+                <p class="card-text " >Low-Level:Below 50 mm<br/>
+                    Moderate-Level:50-150 mm<br/>
+                    High-Level:Above 150 mm   <br/>      </p>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="card" style="margin: left 500px; text-align: center;"><p>Please Select your plants based on your level of humidity, Precipitation, Temperature</p></div>
+    <section id="home" class="text-center text-white d-flex align-items-center" style="background-image: url('summ.jpg'); height: 780px ">
+        <div class="container">
+            
+        </div>
+    </section>
+    
+<!-- About Us Section -->
+<section id="medicinal-plants" class="py-5">
+    <div class="container">
+        <h2 class="text-center" style="color: azure;">Medicinal Value Plants</h2>
+        <div class="row">
+            <!-- Aloe Vera -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="all.png" class="card-img-top" alt="Aloe Vera">
+                    <div class="card-body">
+                        <h5 class="card-title">Aloe Vera (கற்றாழை)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Aloe Vera is known for its skin-healing properties, particularly for burns and cuts.<br>
+                            <strong>Habitat:</strong> Thrives in well-drained, sandy soil with bright, indirect sunlight.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basil -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="bas.png" class="card-img-top" alt="Basil">
+                    <div class="card-body">
+                        <h5 class="card-title">Basil (துளசி)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Basil is an adaptogen, helping the body handle stress and promoting immune health.<br>
+                            <strong>Habitat:</strong> Prefers loamy soil and full sun, thriving in warm temperatures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mint -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="mint.png" class="card-img-top" alt="Mint">
+                    <div class="card-body">
+                        <h5 class="card-title">Mint (புத்தினா)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Known for its digestive properties, mint also helps relieve headaches and nausea.<br>
+                            <strong>Habitat:</strong> Prefers moist, nutrient-rich soil and partial shade.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rosemary -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="rose.png" class="card-img-top" alt="Rosemary">
+                    <div class="card-body">
+                        <h5 class="card-title">Rosemary (ரோஸ்மேரி)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Rosemary is used for improving memory, reducing inflammation, and promoting circulation.<br>
+                            <strong>Habitat:</strong> Prefers well-draining, sandy soil and full sun exposure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lavender -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="lav.png" class="card-img-top" alt="Lavender">
+                    <div class="card-body">
+                        <h5 class="card-title">Lavender (லாவெண்டர்)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Lavender is known for its calming properties, used to treat insomnia and anxiety.<br>
+                            <strong>Habitat:</strong> Thrives in dry, well-drained, sandy soils with full sun exposure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thyme -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="thy.png" class="card-img-top" alt="Thyme">
+                    <div class="card-body">
+                        <h5 class="card-title">Thyme (தைம்)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Thyme is known for its antiseptic and antibacterial properties.<br>
+                            <strong>Habitat:</strong> Prefers well-draining, sandy soil and full sunlight.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lemon Balm -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="lem.png" class="card-img-top" alt="Lemon Balm">
+                    <div class="card-body">
+                        <h5 class="card-title">Lemon Balm (எலுமிச்சை பாட்டு)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> Known for its calming and anti-stress properties, it also aids in digestion.<br>
+                            <strong>Habitat:</strong> Prefers well-draining soil and partial to full sunlight.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiddle Leaf Fig -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="fid.png" class="card-img-top" alt="Fiddle Leaf Fig">
+                    <div class="card-body">
+                        <h5 class="card-title">Fiddle Leaf Fig (பட்டு இலை பச்சை)</h5>
+                        <p class="card-text">
+                            <strong>Medicinal Importance:</strong> While primarily ornamental, its leaves are used in traditional medicine for pain relief.<br>
+                            <strong>Habitat:</strong> Prefers well-draining loamy soil and bright, indirect light.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="ornamental-plants" class="py-5">
+    <div class="container">
+        <h2 class="text-center" style="color: aliceblue;">Ornamental Value Plants</h2>
+        <div class="row">
+            <!-- Snake Plant -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="snake.png" class="card-img-top" alt="Snake Plant">
+                    <div class="card-body">
+                        <h5 class="card-title">Snake Plant (சாதா செடி)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Adds vertical structure and is used for decorative indoor plant displays.<br>
+                            <strong>Habitat:</strong> Thrives in low light to moderate sunlight and well-drained sandy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spider Plant -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="spii.png" class="card-img-top" alt="Spider Plant">
+                    <div class="card-body">
+                        <h5 class="card-title">Spider Plant (பூச்சி செடி)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Known for its long, arching green leaves and tiny white flowers.<br>
+                            <strong>Habitat:</strong> Prefers bright, indirect sunlight and well-drained loamy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peace Lily -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="peace.png" class="card-img-top" alt="Peace Lily">
+                    <div class="card-body">
+                        <h5 class="card-title">Peace Lily (சாந்தி குலந்தை)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Elegant white flowers and glossy green foliage are great for decorative purposes.<br>
+                            <strong>Habitat:</strong> Prefers indirect sunlight and high humidity with well-draining peat-based soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orchid -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="orchid.png" class="card-img-top" alt="Orchid">
+                    <div class="card-body">
+                        <h5 class="card-title">Orchid (ஆர்க்கிட்)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Beautiful, vibrant flowers used in decorative flower arrangements.<br>
+                            <strong>Habitat:</strong> Prefers indirect sunlight and orchid mix with bark for its soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lavender -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="lav.png" class="card-img-top" alt="Lavender">
+                    <div class="card-body">
+                        <h5 class="card-title">Lavender (லாவெண்டர்)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Lavender is used for floral arrangements, potpourri, and home décor.<br>
+                            <strong>Habitat:</strong> Prefers full sun and well-drained sandy, alkaline soils.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bamboo -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="bam.png" class="card-img-top" alt="Bamboo">
+                    <div class="card-body">
+                        <h5 class="card-title">Bamboo (பாம்பு வளைவு)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Adds a natural, tropical look to gardens, often used for borders and fences.<br>
+                            <strong>Habitat:</strong> Grows in moist, loamy soils with partial to full sunlight exposure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiddle Leaf Fig -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="fid.png" class="card-img-top" alt="Fiddle Leaf Fig">
+                    <div class="card-body">
+                        <h5 class="card-title">Fiddle Leaf Fig (பட்டு இலை பச்சை)</h5>
+                        <p class="card-text">
+                            <strong>Ornaments Created:</strong> Large, dramatic leaves make it an excellent focal point in home décor.<br>
+                            <strong>Habitat:</strong> Prefers bright, indirect light and well-draining loamy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="traditional-value-plants" class="py-5">
+    <div class="container">
+        <h2 class="text-center" style="color: aliceblue;">Traditional Value Plants</h2>
+        <div class="row">
+            <!-- Aloe Vera -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="all.png" class="card-img-top" alt="Aloe Vera">
+                    <div class="card-body">
+                        <h5 class="card-title">Aloe Vera (கற்றாழை)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Used in Siddha medicine for cooling and healing properties.<br>
+                            <strong>Habitat:</strong> Thrives in bright, indirect sunlight with well-draining, sandy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basil -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="bas.png" class="card-img-top" alt="Basil">
+                    <div class="card-body">
+                        <h5 class="card-title">Basil (துளசி)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Revered in Hindu tradition for its religious significance and medicinal use.<br>
+                            <strong>Habitat:</strong> Prefers full sun and rich, loamy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mint -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="mint.png" class="card-img-top" alt="Mint">
+                    <div class="card-body">
+                        <h5 class="card-title">Mint (புதினா)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Widely used in Ayurveda for its cooling and digestive properties.<br>
+                            <strong>Habitat:</strong> Grows in moist, nutrient-rich soils with partial shade to full sun.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rosemary -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="rose.png" class="card-img-top" alt="Rosemary">
+                    <div class="card-body">
+                        <h5 class="card-title">Rosemary (ரோஸ்மெரி)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Used in traditional medicine for improving memory and concentration.<br>
+                            <strong>Habitat:</strong> Prefers full sun, well-draining sandy soil, and moderate temperatures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lavender -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="lav.png" class="card-img-top" alt="Lavender">
+                    <div class="card-body">
+                        <h5 class="card-title">Lavender (லாவெண்டர்)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Known for its calming and stress-relieving properties in traditional healing practices.<br>
+                            <strong>Habitat:</strong> Prefers full sun and well-drained, sandy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Neem -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="neem.jpg" class="card-img-top" alt="Neem">
+                    <div class="card-body">
+                        <h5 class="card-title">Neem (வெப்பிலை)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Known for its purifying properties in traditional medicine and Ayurveda.<br>
+                            <strong>Habitat:</strong> Prefers hot, dry climates with well-drained soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tulsi -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="tulsi.png" class="card-img-top" alt="Tulsi">
+                    <div class="card-body">
+                        <h5 class="card-title">Tulsi (துளசி)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Considered sacred in Hinduism and used for its medicinal properties to treat various ailments.<br>
+                            <strong>Habitat:</strong> Prefers full sun and well-drained, loamy soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ginger -->
+            <div class="col-md-3 col-sm-6 my-3">
+                <div class="card">
+                    <img src="ginger.png" class="card-img-top" alt="Ginger">
+                    <div class="card-body">
+                        <h5 class="card-title">Ginger (இஞ்சி)</h5>
+                        <p class="card-text">
+                            <strong>Traditional Value:</strong> Used extensively in traditional medicine for its anti-inflammatory and digestive properties.<br>
+                            <strong>Habitat:</strong> Grows in warm, tropical climates with rich, well-drained soil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="terrace-garden" class="py-5">
+    <div class="container">
+        <h2 class="text-center" style="color: aliceblue;">Terrace Garden Plants</h2>
+        <div class="row">
+            <!-- Group 1: Sun-Loving Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="sunflower.jpg" class="card-img-top" alt="Sunflower">
+                    <div class="card-body">
+                        <h5 class="card-title">Sunflower (சூரியகாந்தி)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> Sunflowers thrive in full sun, so plant them in containers that receive at least 6-8 hours of direct sunlight daily.<br>
+                            <strong>Planting Tip:</strong> Use a well-draining potting mix and ensure regular watering, especially during dry periods.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2: Shade-Tolerant Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="peace-lily.jpg" class="card-img-top" alt="Peace Lily">
+                    <div class="card-body">
+                        <h5 class="card-title">Peace Lily (பீஸ் லிலி)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> Ideal for shaded spots on the terrace. Plant in a medium-sized pot with rich, well-draining soil.<br>
+                            <strong>Planting Tip:</strong> Keep the soil consistently moist and avoid direct sunlight.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3: Edible Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="tomato.jpg" class="card-img-top" alt="Tomato">
+                    <div class="card-body">
+                        <h5 class="card-title">Tomato (தக்காளி)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> Tomatoes need full sun, so place them in a sunny corner of the terrace. Plant in containers with a deep root system.<br>
+                            <strong>Planting Tip:</strong> Water consistently, ensuring good drainage to prevent root rot.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: Hanging Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="ivy.jpg" class="card-img-top" alt="Ivy">
+                    <div class="card-body">
+                        <h5 class="card-title">Ivy (அமைந்த கமல)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> Ivy is great for hanging baskets or as a trailing plant along walls. Ensure the container has proper drainage.<br>
+                            <strong>Planting Tip:</strong> Ivy can grow well in partial sunlight and should be watered regularly but not overwatered.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 5: Low Maintenance Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="snake-plant.jpg" class="card-img-top" alt="Snake Plant">
+                    <div class="card-body">
+                        <h5 class="card-title">Snake Plant (நாகமணிரொக்க)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> This plant can be placed in a low-light area of your terrace. It grows well in pots with well-draining soil.<br>
+                            <strong>Planting Tip:</strong> Water sparingly, as it is drought-tolerant.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 6: Flowering Plants -->
+            <div class="col-md-4 col-sm-6 my-3">
+                <div class="card">
+                    <img src="bougainvillea.jpg" class="card-img-top" alt="Bougainvillea">
+                    <div class="card-body">
+                        <h5 class="card-title">Bougainvillea (பூக்கொடி)</h5>
+                        <p class="card-text">
+                            <strong>How to Plant:</strong> Bougainvillea requires full sun to bloom brightly. Plant it in a large container with a well-drained soil mix.<br>
+                            <strong>Planting Tip:</strong> Water only when the soil is dry to the touch to prevent root rot.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  <!-- Background Section with Newsletter Subscription and Query Form -->
+  <section class="newsletter-section">
+    <h2>Subscribe to Our Green Grow</h2>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Enter your email address" required>
+
+      <!-- Query Section -->
+      <h5>If you have any queries, feel free to ask:</h5>
+      <textarea placeholder="Enter your query here..." rows="5" required></textarea>
+
+      <!-- Submit Button -->
+      <button type="submit">Submit</button>
+    </form>
+  </section>
+
+  <!-- Footer Section with About Us, Quick Links, and Social Media -->
+  <section class="footer-section" id="contact">
+    <div class="container">
+      <div class="row">
+        <!-- About Us -->
+        <div class="col-md-4">
+          <h4>For Contact</h4>
+          <p>
+           Phn : 123456789</p>
+           <p>Mail : GreenGrow@gmail.com</p>
+            
+        </div>
+        <!-- Quick Links -->
+        <div class="col-md-4">
+          <h4>Welocome to Green Grow</h4>
+          <ul> </ul>
+
+
+
+
+
+
+
+        
+
+          <ul>
+            Your journey to better plant care starts here
+          </ul>
+        </div>
+        <!-- Connect With Us -->
+        <div class="col-md-4">
+          <h4>Connect With Us</h4>
+          <div>
+            <a href="#"><img src="face.png" alt="Facebook" class="icon"></a>
+            <a href="#"><img src="twitter.png" alt="Twitter" class="icon"></a>
+            <a href="#"><img src="ins.png" alt="Instagram" class="icon"></a>
+            <a href="#"><img src="pin.png" alt="Pinterest" class="icon"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+<hr/>
+    <p>  Green Grow 2024 All rights reserved.</p> <!-- Added copyright line -->
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

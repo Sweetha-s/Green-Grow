@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Type Prediction Result</title>
+   
+    <!-- Include Bootstrap CSS for Navbar -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    
+</head>
+<body>
+    <div class="weather-container">
+        <div class="container-weather">
+            <h1 style="color: lightgreen;">Weather and Soil Moisture Details</h1>
+            <div id="details-box" class="details-boxes"></div>
+            <div id="details-box-error" class="details-box-error">
+                <p>Unable to retrieve your location. Please allow location access in your browser settings.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       async function getWeatherData(latitude, longitude) {
+    const apiKey = '30bbc6544afc479084c80801240311'; // Replace with your actual API key
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Check if the API returned an error
+        if (data.error) {
+            displayError(`Error: ${data.error.message}`);
+            return;
+        }
+
+        // Extract weather and location details
+        const weather = data.current;
+        const location = data.location;
+
+        const weatherDetails = `
+            <div class="weather-item">
+                <h3>Location</h3>
+                <p>${location.name}, ${location.region}, ${location.country}</p>
+            </div>
+            <div class="weather-item">
+                <h3>Temperature</h3>
+                <p>${weather.temp_c}°C</p>
+            </div>
+            <div class="weather-item">
+                <h3>Condition</h3>
+                <p>${weather.condition.text}</p>
+            </div>
+            <div class="weather-item">
+                <h3>Humidity</h3>
+                <p>${weather.humidity}%</p>
+            </div>
+            <div class="weather-item">
+                <h3>Wind</h3>
+                <p>${weather.wind_kph} km/h</p>
+            </div>
+            <div class="weather-item">
+                <h3>Precipitation</h3>
+                <p>${weather.precip_mm} mm</p>
+            </div>
+        `;
+
+        // Display weather details
+        document.getElementById('details-box').innerHTML = weatherDetails;
+
+        // Hide error box if no error
+        document.getElementById('details-box-error').style.display = 'none';
+
+        // Calculate and display soil moisture
+        calculateSoilMoisture(weather.precip_mm, weather.temp_c, weather.humidity);
+    } catch (error) {
+        displayError('Unable to fetch weather data. Please try again later.');
+        console.error("Error fetching weather data: ", error);
+    }
+}
+
+function calculateSoilMoisture(precipitation, temperature, humidity) {
+    const initialSoilMoisture = 100; // Initial soil moisture level
+    const evapotranspiration = estimateEvapotranspiration(temperature, humidity);
+    const soilMoistureChange = precipitation - evapotranspiration;
+    const soilMoisture = initialSoilMoisture + soilMoistureChange;
+
+    const soilMoistureDetails = `
+        <div class="soil-moisture-item">
+            <h3>Evapotranspiration (ET)</h3>
+            <p>${evapotranspiration.toFixed(2)} mm</p>
+        </div>
+        <div class="soil-moisture-item">
+            <h3>Calculated Soil Moisture</h3>
+            <p>${soilMoisture.toFixed(2)} mm</p>
+        </div>
+    `;
+
+    document.getElementById('details-box').insertAdjacentHTML('beforeend', soilMoistureDetails);
+
+    // Notify user if soil moisture is below a critical level
+    if (soilMoisture < 50) {
+        sendNotification(`Soil moisture is critically low at ${soilMoisture.toFixed(2)} mm. Please water the plants!`);
+    }
+}
+
+function sendNotification(message) {
+    if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+            showNotification(message);
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    showNotification(message);
+                }
+            });
+        } else {
+            console.log('Notifications are blocked. Please enable them in your browser settings.');
+        }
+    } else {
+        console.log('Your browser does not support notifications.');
+    }
+}
+
+function showNotification(message) {
+    new Notification('Green Grow Alert', {
+        body: message,
+    });
+}
+
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                getWeatherData(latitude, longitude);
+            },
+            (error) => {
+                console.error("Geolocation Error: ", error);
+                displayError("Unable to retrieve your location. Please allow location access in your browser settings.");
+            }
+        );
+    } else {
+        displayError("Geolocation is not supported by your browser.");
+    }
+}
+
+function displayError(message) {
+    document.getElementById('details-box-error').innerHTML = `<p>${message}</p>`;
+    document.getElementById('details-box-error').style.display = 'block';
+}
+
+function estimateEvapotranspiration(temp, humidity) {
+    return (temp * humidity) / 100; // Simplified evapotranspiration calculation
+}
+
+// Trigger location fetching on page load
+window.onload = getUserLocation;
+
+    </script>
+    <script>
+        function askNotificationPermission() {
+  // Check if the browser supports notifications
+  if (!("Notification" in window)) {
+    console.log("This browser does not support notifications.");
+    return;
+  }
+  Notification.requestPermission().then((permission) => {
+    // set the button to shown or hidden, depending on what the user answers
+    notificationBtn.style.display = permission === "granted" ? "none" : "block";
+  });
+}
+
+    </script>
+
+</body>
+</html>

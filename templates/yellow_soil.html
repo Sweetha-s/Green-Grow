@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yellow Soil Plants</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: #01190f;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto;
+            background-color: #01190f;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #033d2d;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yellow Soil Plants</h1>
+    <div class="container my-5">
+        <div class="row" id="yellow-plant-cards">
+            <!-- Yellow Plant Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const yellowPlants = [
+            {
+                "name": "Rice (அரிசி)",
+                "image": "/static/rice.png",
+                "brief": `
+                    <strong>Soil:</strong> Yellow, moisture-rich <br>
+                    <strong>Watering:</strong> Frequent <br>
+                    <strong>Nutrients:</strong> Nitrogen, phosphorus <br>
+                    <strong>Conditions:</strong> Warm and humid 
+                `,
+                "detailed": `
+                    <strong>Soil:</strong> Yellow, moisture-rich (மஞ்சள், ஈரமான மண்)<br>
+                    <strong>Weather Range:</strong> 20°C - 30°C (20°C - 30°C)<br>
+                    <strong>Conditions:</strong> Warm and humid (வெப்பமான மற்றும் ஈரப்பதம் நிறைந்த இடம்)<br>
+                    <strong>Nutrients:</strong> Nitrogen, phosphorus (நைட்ரஜன், பாஷ்பரஸ்)<br>
+                    <strong>Watering:</strong> Frequent (அதிக பாசனம் தேவை)<br>
+                    <strong>Pesticide:</strong> Organic pesticide (உயிர்ச் சார்ந்த பூச்சிமருந்து)<br>
+                    <strong>Benefits:</strong> High yield, energy booster (உயர்ந்த உற்பத்தி, ஆற்றல் அதிகரிப்பது)<br>
+                    <strong>Traditional Importance:</strong> Main food crop (முக்கிய உணவு பயிர்)<br>
+                `
+            },
+            {
+                "name": "Banana (வாழைப்பழம்)",
+                "image": "/static/banana.png",
+                "brief": `
+                    <strong>Soil:</strong> Yellow, nutrient-rich <br>
+                    <strong>Watering:</strong> Weekly <br>
+                    <strong>Nutrients:</strong> High potassium <br>
+                    <strong>Conditions:</strong> Tropical climate 
+                `,
+                "detailed": `
+                    <strong>Soil:</strong> Yellow, nutrient-rich (மஞ்சள், சத்துக்கள் நிறைந்த மண்)<br>
+                    <strong>Weather Range:</strong> 25°C - 35°C (25°C - 35°C)<br>
+                    <strong>Conditions:</strong> Tropical climate (சோழிகரமான வானிலை)<br>
+                    <strong>Nutrients:</strong> High potassium (உயர் பொட்டாசியம்)<br>
+                    <strong>Watering:</strong> Weekly (வாரத்திற்கு ஒரு முறையாவது பாசனம்)<br>
+                    <strong>Pesticide:</strong> Organic pesticide to prevent pests (பூச்சிகள் தவிர்க்க உயிர்ச் சார்ந்த பூச்சிமருந்து)<br>
+                    <strong>Benefits:</strong> Rich in vitamins, supports digestion (விட்டமின் C நிறைந்தது, ஊட்டச்சத்து உறுதி செய்யும்)<br>
+                    <strong>Traditional Importance:</strong> Important fruit crop (முக்கிய பழக்கிருப்பு)<br>
+                `
+            },
+            { 
+                "name": "Tea (தேநீர்)", 
+                "image": "/static/tea.png", 
+                "brief": `
+                    <strong>Soil:</strong> Yellow, acidic <br>
+                    <strong>Watering:</strong> Regular <br>
+                    <strong>Nutrients:</strong> Phosphorus, organic matter <br>
+                    <strong>Conditions:</strong> Cool and humid 
+                `,
+                "detailed": `
+                    <strong>Soil:</strong> Yellow, acidic (மஞ்சள், அமிலத்தன்மை கொண்ட மண்)<br>
+                    <strong>Weather Range:</strong> 15°C - 25°C (15°C - 25°C)<br>
+                    <strong>Conditions:</strong> Cool and humid (குளிர்ச்சியான மற்றும் ஈரப்பதம் கொண்ட இடம்)<br>
+                    <strong>Nutrients:</strong> Phosphorus, organic matter (பாஷ்பரஸ், இயற்கை சத்துக்கள்)<br>
+                    <strong>Watering:</strong> Regular (தோறும் பாசனம் தேவை)<br>
+                    <strong>Pesticide:</strong> Organic pesticide to prevent mites (கரப்பான் தவிர்க்க உயிர்ச் சார்ந்த பூச்சிமருந்து)<br>
+                    <strong>Benefits:</strong> Rich in antioxidants, boosts energy (ஆக்ஸிஜன் நுண்ணூட்டங்கள் நிறைந்தது, ஆற்றலை அதிகரிக்கிறது)<br>
+                    <strong>Traditional Importance:</strong> Tea culture holds social and economic importance (தேநீர் கலாச்சாரம் சமூக மற்றும் பொருளாதார முக்கியத்துவம் கொண்டது)<br>
+                `
+            },
+            { 
+                "name": "Citrus Fruits (கொரிக்காய்கள்)", 
+                "image": "/static/citrus.png", 
+                "brief": `
+                    <strong>Soil:</strong> Yellow, sandy <br>
+                    <strong>Watering:</strong> Minimal <br>
+                    <strong>Nutrients:</strong> Vitamin C, calcium <br>
+                    <strong>Conditions:</strong> Hot and dry 
+                `,
+                "detailed": `
+                    <strong>Soil:</strong> Yellow, sandy (மஞ்சள், மணல் மண்)<br>
+                    <strong>Weather Range:</strong> 25°C - 40°C (25°C - 40°C)<br>
+                    <strong>Conditions:</strong> Hot and dry (வெப்பமான மற்றும் பசித்தியான இடம்)<br>
+                    <strong>Nutrients:</strong> Vitamin C, calcium (விட்டமின் C, கால்சியம்)<br>
+                    <strong>Watering:</strong> Minimal (சிறு அளவு பாசனம்)<br>
+                    <strong>Pesticide:</strong> Natural pesticide to avoid fungal infection (பூஞ்சைக்காற்று பாதுகாப்புக்கான இயற்கை பூச்சிமருந்து)<br>
+                    <strong>Benefits:</strong> Boosts immune system, reduces inflammation (உயிரணு முறைப்பாடுகளை அதிகரிக்கிறது, உடல் அழற்சி குறைக்கின்றது)<br>
+                    <strong>Traditional Importance:</strong> Part of traditional diet (பாரம்பரிய உணவின் பகுதியாக இருக்கின்றது)<br>
+                `
+            },
+            { 
+                "name": "Groundnut (பேடு)", 
+                "image": "/static/groundnut.png", 
+                "brief": `
+                    <strong>Soil:</strong> Yellow, loamy <br>
+                    <strong>Watering:</strong> Weekly<br>
+                    <strong>Nutrients:</strong> Phosphorus <br>
+                    <strong>Conditions:</strong> Full sun 
+                `,
+                "detailed": `
+                    <strong>Soil:</strong> Yellow, loamy (மஞ்சள், மண் கலந்த மண்)<br>
+                    <strong>Weather Range:</strong> 20°C - 30°C (20°C - 30°C)<br>
+                    <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+                    <strong>Nutrients:</strong> Phosphorus (பாஷ்பரஸ்)<br>
+                    <strong>Watering:</strong> Weekly (வாரத்திற்கு ஒரு முறையாவது பாசனம்)<br>
+                    <strong>Pesticide:</strong> Organic pesticide for pest control (பூச்சி கட்டுப்பாட்டிற்கு உயிர்ச் சார்ந்த பூச்சிமருந்து)<br>
+                    <strong>Benefits:</strong> High in protein, good for heart (உயர் புரதம் கொண்டது, இதயத்திற்கு சிறந்தது)<br>
+                    <strong>Traditional Importance:</strong> Widely used in snacks and oil production (நிறைய குழம்பு மற்றும் எண்ணெய் உற்பத்தியில் பயன்படுத்தப்படுகிறது)<br>
+                `
+            }
+        ];
+
+        function displayYellowPlants() {
+            const container = document.getElementById('yellow-plant-cards');
+            yellowPlants.forEach((plant, index) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 col-sm-12 my-3';
+
+                card.innerHTML = `
+                    <div class="card p-3">
+                        <div class="card" onclick="alert('You selected ${plant.name}')">
+                        <img src="${plant.image}" class="card-img-top" alt="${plant.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="card-text" id="plant-text-${index}">${plant.brief}</p>
+                            <button class="btn btn-dark" onclick="showDetails(${index})" id="read-more-${index}">Read More</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(index) {
+            const plant = yellowPlants[index];
+            const textElement = document.getElementById(`plant-text-${index}`);
+            textElement.innerHTML = plant.detailed;
+
+            const button = document.getElementById(`read-more-${index}`);
+            button.style.display = "none"; // Hide the "Read More" button after showing details
+        }
+
+        displayYellowPlants();
+    </script>
+</body>
+</html>

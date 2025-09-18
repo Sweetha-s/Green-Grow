@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laterite Plants</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: #01190f;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto;
+            background-color: #01190f;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #033d2d;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Laterite Soil Plants</h1>
+    <div class="container my-5">
+        <div class="row" id="plant-cards">
+            <!-- Plant Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const peatPlants = [
+    {
+        "name": "Rubber Plant (ரப்பர் பிளான்ட்)",
+        "image": "/static/rubber_plant.png",
+        "brief": "Soil: Laterite, well-draining<br>Watering: Weekly<br>Nutrients: Moderate<br>Conditions: Bright, indirect light",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, well-draining (லேட்டரைட், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Bright, indirect light (கிளர்ச்சி, நேரடியாக இல்லாத சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Purifies the air and adds greenery (காற்றை சுத்தமாக்கி, பசுமையை வழங்குகிறது)<br>
+            <strong>Traditional Importance:</strong> Known for ornamental purposes (அலங்கார நோக்கங்களுக்காக அறியப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, soap-water solution (நீம் எண்ணெய், சோப்-நீர் கலவை)<br>
+        `
+    },
+    {
+        "name": "Guava (கொய்யா)",
+        "image": "/static/guava.png",
+        "brief": "Soil: Laterite, well-draining<br>Watering: Twice a week<br>Nutrients: Moderate<br>Conditions: Full sun, warm climate",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, well-draining (லேட்டரைட், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Twice a week (ஒவ்வொரு வாரமும் இரு முறை)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Full sun, warm climate (முழு சூரிய ஒளி, சூடான வானிலை)<br>
+            <strong>Benefits:</strong> Rich in vitamin C, promotes digestion, boosts immunity (விட்டமின் சியில் செறிவான, ஆவியத்திற்கு உதவுகிறது, நோய் எதிர்ப்பு சக்தியை அதிகரிக்கிறது)<br>
+            <strong>Traditional Importance:</strong> Used in traditional remedies and for its medicinal properties (பண்டைய மருந்து மற்றும் மருத்துவப் பயன்பாடுகளுக்கு பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, garlic-chili spray (நீம் எண்ணெய், பூண்டு-மிளகாய் ஸ்ப்ரே)<br>
+        `
+    },
+    {
+        "name": "Tulsi (துளசி)",
+        "image": "/static/tulsi.png",
+        "brief": "Soil: Well-draining, fertile soil<br>Watering: Moderate, keep soil moist<br>Nutrients: Moderate, organic compost<br>Conditions: Full sun, warm climate",
+        "detailed": `
+            <strong>Soil:</strong> Well-draining, fertile soil (நன்கு வடிகட்டி, செழுமையான மண்)<br>
+            <strong>Watering:</strong> Moderate, keep soil moist (மிதமானது, மண்ணை ஈரமாக வைத்திருங்கள்)<br>
+            <strong>Nutrients:</strong> Moderate, organic compost (நடுத்தரமான, காரிக உணவு)<br>
+            <strong>Conditions:</strong> Full sun, warm climate (முழு சூரிய ஒளி, சூடான வானிலை)<br>
+            <strong>Benefits:</strong> Improves immunity, aids digestion, reduces stress, antibacterial (நோய் எதிர்ப்பு சக்தி அதிகரிக்கும், செரிமானம் உதவுகிறது, அழுத்தம் குறைக்கும், பாக்டீரியா எதிர்ப்பு)<br>
+            <strong>Traditional Importance:</strong> Used in Ayurvedic medicine for its healing properties (அயுர்வேத மருத்துவத்தில் அதன் குணப்படுத்தும் பண்புகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, garlic-chili spray (நீம் எண்ணெய், பூண்டு-மிளகாய் ஸ்ப்ரே)<br>
+        `
+    },
+    {
+        "name": "Banana Plant (வாழைப்பெட்டி)",
+        "image": "/static/banana_plant.png",
+        "brief": "Soil: Laterite, rich in organic matter<br>Watering: Twice a week<br>Nutrients: High requirements<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, rich in organic matter (லேட்டரைட், காரிகைகளில் செறிந்த)<br>
+            <strong>Watering:</strong> Twice a week (ஒவ்வொரு வாரமும் இரு முறை)<br>
+            <strong>Nutrients:</strong> High requirements (உயர்ந்த தேவைகள்)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Provides nutritious fruits, enhances soil (சத்தான பழங்களை வழங்கி, மண்ணை மேம்படுத்துகிறது)<br>
+            <strong>Traditional Importance:</strong> Used for food and medicinal purposes (உணவு மற்றும் மருத்துவப் பயன்பாடுகளுக்கு பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, insecticidal soap (நீம் எண்ணெய், பூச்சி நிவர்த்தி சோப்)<br>
+        `
+    },
+    {
+        "name": "Coffee Plant (காஃபி செடி)",
+        "image": "/static/coffee_plant.png",
+        "brief": "Soil: Laterite, acidic and well-drained<br>Watering: Weekly<br>Nutrients: Moderate<br>Conditions: Partial shade",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, acidic and well-drained (லேட்டரைட், அமிலமான மற்றும் நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Partial shade (பகுதி நிழல்)<br>
+            <strong>Benefits:</strong> Produces coffee beans, boosts energy (காபி பீன்களை உற்பத்தி செய்து, சக்தியை அதிகரிக்கிறது)<br>
+            <strong>Traditional Importance:</strong> Used for medicinal purposes and beverages (மருத்துவ பயன்பாடுகளுக்கும் பானங்களுக்கும் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, garlic-chili spray (நீம் எண்ணெய், பூண்டு-மிளகாய் ஸ்ப்ரே)<br>
+        `
+    },
+    {
+        "name": "Ginger (இஞ்சிக் கிழங்கு)",
+        "image": "/static/ginger.png",
+        "brief": "Soil: Laterite, rich and loamy<br>Watering: Weekly<br>Nutrients: Moderate<br>Conditions: Partial shade, warm",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, rich and loamy (லேட்டரைட், செறிந்த மற்றும் வளமான)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Partial shade, warm (பகுதி நிழல், சூடு)<br>
+            <strong>Benefits:</strong> Used for culinary and medicinal purposes (சமைப்பதற்கும் மருத்துவப் பயன்பாடுகளுக்கு பயன்படுத்தப்படுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used in ancient remedies (பண்டைய மருத்துவங்களில் பயன்படுத்தப்பட்டது)<br>
+            <strong>Pesticides:</strong> Neem oil, chili-garlic spray (நீம் எண்ணெய், மிளகாய்-பூண்டு ஸ்ப்ரே)<br>
+        `
+    },
+    {
+        "name": "Taro (கந்தா)",
+        "image": "/static/taro.png",
+        "brief": "Soil: Laterite, moisture-retaining<br>Watering: Weekly<br>Nutrients: High<br>Conditions: Partial shade, humid",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, moisture-retaining (லேட்டரைட், ஈரப்பதத்தை காப்பாற்றும்)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> High (உயர்ந்த)<br>
+            <strong>Conditions:</strong> Partial shade, humid (பகுதி நிழல், ஈரமான)<br>
+            <strong>Benefits:</strong> Rich in starch and minerals (காரிகை மற்றும் கனிமங்களின் செறிவான)<br>
+            <strong>Traditional Importance:</strong> Used in many cuisines and medicinal preparations (பல சமையல்களில் மற்றும் மருத்துவ தயாரிப்புகளில் பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, insecticidal soap (நீம் எண்ணெய், பூச்சி நிவர்த்தி சோப்)<br>
+        `
+    },
+    {
+        "name": "Papaya (பப்பாளி)",
+        "image": "/static/papaya.png",
+        "brief": "Soil: Laterite, well-draining<br>Watering: Twice a week<br>Nutrients: Moderate<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, well-draining (லேட்டரைட், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Twice a week (ஒவ்வொரு வாரமும் இரு முறை)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> Rich in vitamins, aids digestion (விட்டமின்களில் செறிவான, ஆவியத்திற்கு உதவுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used for medicinal purposes (மருத்துவப் பயன்பாடுகளுக்காக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, garlic-chili spray (நீம் எண்ணெய், பூண்டு-மிளகாய் ஸ்ப்ரே)<br>
+        `
+    },
+    {
+        "name": "Pineapple (அன்னாசி)",
+        "image": "/static/pineapple.png",
+        "brief": "Soil: Laterite, sandy<br>Watering: Weekly<br>Nutrients: Moderate<br>Conditions: Full sun",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, sandy (லேட்டரைட், மணல்)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> Moderate (நடுத்தரமான)<br>
+            <strong>Conditions:</strong> Full sun (முழு சூரிய ஒளி)<br>
+            <strong>Benefits:</strong> High in vitamin C, supports immune health (விட்டமின் சியில் செறிவான, நோய் எதிர்ப்பு சக்திக்கு உதவுகிறது)<br>
+            <strong>Traditional Importance:</strong> Used in tropical cultures (உயிர்ப்பூக்கலாக பயன்படுத்தப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, soap-water solution (நீம் எண்ணெய், சோப்-நீர் கலவை)<br>
+        `
+    },
+    {
+        "name": "Mango (மாம்பழம்)",
+        "image": "/static/mango.png",
+        "brief": "Soil: Laterite, well-draining<br>Watering: Weekly<br>Nutrients: High requirements<br>Conditions: Full sun, warm climate",
+        "detailed": `
+            <strong>Soil:</strong> Laterite, well-draining (லேட்டரைட், நன்கு வடிகட்டி)<br>
+            <strong>Watering:</strong> Weekly (ஒவ்வொரு வாரமும்)<br>
+            <strong>Nutrients:</strong> High requirements (உயர்ந்த தேவைகள்)<br>
+            <strong>Conditions:</strong> Full sun, warm climate (முழு சூரிய ஒளி, சூடு)<br>
+            <strong>Benefits:</strong> Provides delicious fruit, rich in vitamins (சுவையான பழங்களை வழங்கி, விட்டமின்களில் செறிவான)<br>
+            <strong>Traditional Importance:</strong> Sacred in many cultures (பல கலாச்சாரங்களில் புனிதமாக கருதப்படுகிறது)<br>
+            <strong>Pesticides:</strong> Neem oil, garlic-chili spray (நீம் எண்ணெய், பூண்டு-மிளகாய் ஸ்ப்ரே)<br>
+        `
+    }
+];
+
+
+
+        function displayPlants() {
+            const container = document.getElementById('plant-cards');
+            peatPlants.forEach((plant, index) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 my-3';
+
+                card.innerHTML = `
+                    <div class="card p-3">
+                        <div class="card" onclick="alert('You selected ${plant.name}')">
+                        <img src="${plant.image}" class="card-img-top" alt="${plant.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="card-text" id="plant-text-${index}">${plant.brief}</p>
+                            <button class="btn btn-dark" onclick="showDetails(${index})" id="read-more-${index}">Read More</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(index) {
+            const plant = peatPlants[index];
+            const textElement = document.getElementById(`plant-text-${index}`);
+            textElement.innerHTML = plant.detailed;
+
+            const button = document.getElementById(`read-more-${index}`);
+            button.style.display = "none"; // Hide the "Read More" button after showing details
+        }
+
+        displayPlants();
+    </script>
+</body>
+</html>

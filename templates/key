@@ -1,0 +1,9 @@
+const firebaseConfig = {
+            apiKey: "AIzaSyBuZBAmKagcHx7rGDE1PZj4cO1PEoMe76s",
+    authDomain: "green-grow-2394d.firebaseapp.com",
+    projectId: "green-grow-2394d",
+    storageBucket: "green-grow-2394d.firebasestorage.app",
+    messagingSenderId: "601105416978",
+    appId: "1:601105416978:web:d974cc4b8633878714a9cb",
+    measurementId: "G-CTBKPHH6BF"
+  };

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peat Plants</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            background-color: #01190f;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto;
+            background-color: #01190f;
+            color: white;
+        }
+        .btn:hover {
+            background-color: #033d2d;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Peat Plants</h1>
+    <div class="container my-5">
+        <div class="row" id="plant-cards">
+            <!-- Plant Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const peatPlants = [
+    {
+        "name": "Potato (உருளைக்கிழங்கு)",
+        "image": "/static/potato.png",
+        "brief": "Soil: Well-drained, slightly acidic peat<br>Watering: Regular, moist but not waterlogged<br>Nutrients: High potassium and nitrogen<br>Conditions: Full sunlight, moderate temperatures",
+        "detailed": `
+            <strong>Soil:</strong> Well-drained, slightly acidic peat (நன்கு வடிகட்டிய, சிறிது அமிலத்தன்மை கொண்ட பீட் மண்)<br>
+            <strong>Watering:</strong> Regular, moist but not waterlogged (தோறும் பாசனம், ஈரமாக ஆனால் நீரில் மிதக்கம் இல்லாமல்)<br>
+            <strong>Nutrients:</strong> High potassium and nitrogen (உயர்ந்த பொட்டாசியம் மற்றும் நைட்ரஜன்)<br>
+            <strong>Conditions:</strong> Full sunlight, moderate temperatures (முழு நேர ஒளி, மிதமான வெப்ப நிலை)<br>
+            <strong>Benefits:</strong> Rich in starch, high yield (உயர்ந்த கூழில் நிறைந்தது, அதிக உற்பத்தி)<br>
+            <strong>Traditional Importance:</strong> Staple food crop (முக்கிய உணவு பயிர்)<br>
+        `
+    },
+    {
+        "name": "Carrot (கேரட்)",
+        "image": "/static/carrot.png",
+        "brief": "Soil: Deep, loose peat<br>Watering: Consistent moisture<br>Nutrients: Rich in potassium, low in nitrogen<br>Conditions: Cool temperatures",
+        "detailed": `
+            <strong>Soil:</strong> Deep, loose peat (ஆழமான, தளர்ந்த பீட் மண்)<br>
+            <strong>Watering:</strong> Consistent moisture (இனிமையான ஈரத்தன்மை)<br>
+            <strong>Nutrients:</strong> Rich in potassium, low in nitrogen (பொட்டாசியத்தில் நிறைந்தது, நைட்ரஜனில் குறைவானது)<br>
+            <strong>Conditions:</strong> Cool temperatures (குளிரான வெப்ப நிலை)<br>
+            <strong>Benefits:</strong> Rich in vitamin A, improves vision (விட்டமின் A நிறைந்தது, கண்ணின் பார்வையை மேம்படுத்துகிறது)<br>
+            <strong>Traditional Importance:</strong> Common vegetable in traditional diets (பழங்கால உணவில் பொதுவான காய்கறி)<br>
+        `
+    },
+    {
+        "name": "Wheat (கோதுமை)",
+        "image": "/static/wheat.png",
+        "brief": "Soil: Loamy peat soil<br>Watering: Moderate, avoid overwatering<br>Nutrients: Nitrogen and phosphorus<br>Conditions: Cool climate with sunlight",
+        "detailed": `
+            <strong>Soil:</strong> Loamy peat soil (நெடுமண் பீட் மண்)<br>
+            <strong>Watering:</strong> Moderate, avoid overwatering (மிதமான பாசனம், நீரில் மிதக்கம் தவிர்க்கவும்)<br>
+            <strong>Nutrients:</strong> Nitrogen and phosphorus (நைட்ரஜன் மற்றும் பாஷ்பரஸ்)<br>
+            <strong>Conditions:</strong> Cool climate with sunlight (குளிர்ந்த வானிலை மற்றும் வெளிச்சம்)<br>
+            <strong>Benefits:</strong> Good source of fiber and protein (நல்ல நார் மற்றும் புரதம்)<br>
+            <strong>Traditional Importance:</strong> One of the main grains in traditional food (பழங்கால உணவில் முக்கியமான தானிய)<br>
+        `
+    },
+    {
+        "name": "Barley (சர்க்கரைச் சோளம்)",
+        "image": "/static/barley.png",
+        "brief": "Soil: Fertile, aerated peat soil<br>Watering: Low to moderate<br>Nutrients: Phosphorus and potassium<br>Conditions: Sunny and cool climate",
+        "detailed": `
+            <strong>Soil:</strong> Fertile, aerated peat soil (பசுமையான, காற்றோட்டம் பெறும் பீட் மண்)<br>
+            <strong>Watering:</strong> Low to moderate (குறைவானது முதல் மிதமான பாசனம்)<br>
+            <strong>Nutrients:</strong> Phosphorus and potassium (பாஷ்பரஸ் மற்றும் பொட்டாசியம்)<br>
+            <strong>Conditions:</strong> Sunny and cool climate (சூரிய ஒளி மற்றும் குளிரான வானிலை)<br>
+            <strong>Benefits:</strong> Promotes digestion, rich in antioxidants (உணவு செரிமானத்தை ஊக்குவிக்கும், ஆக்ஸிஜன் நுண்ணூட்டங்கள் நிறைந்தது)<br>
+            <strong>Traditional Importance:</strong> Used in traditional drinks and food (பழங்கால பானங்கள் மற்றும் உணவில் பயன்படுத்தப்படுகிறது)<br>
+        `
+    },
+    {
+        "name": "Turnip (நெய் முள்ளங்கி)",
+        "image": "/static/turnip.png",
+        "brief": "Soil: Loose, nutrient-rich peat soil<br>Watering: Moderate, consistent moisture<br>Nutrients: Potassium and calcium<br>Conditions: Cool, mild temperatures",
+        "detailed": `
+            <strong>Soil:</strong> Loose, nutrient-rich peat soil (சுருங்கிய, சத்துக்கள் நிறைந்த பீட் மண்)<br>
+            <strong>Watering:</strong> Moderate, consistent moisture (மிதமானது, நிலையான ஈரப்பதம்)<br>
+            <strong>Nutrients:</strong> Potassium and calcium (பொட்டாசியம் மற்றும் கால்சியம்)<br>
+            <strong>Conditions:</strong> Cool, mild temperatures (குளிர்ந்த மற்றும் மிதமான வெப்பநிலை)<br>
+            <strong>Benefits:</strong> Provides nutrition and supports health (ஊட்டச்சத்து மற்றும் உடல்நலம்)<br>
+            <strong>Traditional Importance:</strong> Used in ancient medicines (பண்டைய மருத்துவங்களில் பயன்படுத்தப்படுகிறது)<br>
+        `
+    }
+];
+
+
+        function displayPlants() {
+            const container = document.getElementById('plant-cards');
+            peatPlants.forEach((plant, index) => {
+                const card = document.createElement('div');
+                card.className = 'col-md-6 my-3';
+
+                card.innerHTML = `
+                    <div class="card p-3">
+                        <div class="card" onclick="alert('You selected ${plant.name}')">
+                        <img src="${plant.image}" class="card-img-top" alt="${plant.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${plant.name}</h5>
+                            <p class="card-text" id="plant-text-${index}">${plant.brief}</p>
+                            <button class="btn btn-dark" onclick="showDetails(${index})" id="read-more-${index}">Read More</button>
+                        </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(index) {
+            const plant = peatPlants[index];
+            const textElement = document.getElementById(`plant-text-${index}`);
+            textElement.innerHTML = plant.detailed;
+
+            const button = document.getElementById(`read-more-${index}`);
+            button.style.display = "none"; // Hide the "Read More" button after showing details
+        }
+
+        displayPlants();
+    </script>
+</body>
+</html>
